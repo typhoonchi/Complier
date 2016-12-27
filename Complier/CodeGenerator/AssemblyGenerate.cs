@@ -223,7 +223,7 @@ namespace Complier.CodeGenerator
             {
                 builder.Append(item.ToString()+",");
             }
-            builder.Replace(",", ")",builder.Length, 1);
+            builder.Replace(",", ")",builder.Length-1,1);
             Console.WriteLine(builder.ToString());
         }
 

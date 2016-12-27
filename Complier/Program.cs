@@ -49,7 +49,7 @@ int main()
     }
     return sum;
 }";
-                code = defaultCode;
+                //code = defaultCode;
 
                 #endregion
             }
@@ -103,8 +103,8 @@ int main()
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("**********************代码生成*************************");
             Console.ResetColor();
-            var codeGeneratr = new AssemblyGenerate();
-            codeGeneratr.Generate(ast);
+            var codeGenerate = new AssemblyGenerate();
+            codeGenerate.Generate(ast);
 
             //编译
             Console.ForegroundColor = ConsoleColor.Green;
