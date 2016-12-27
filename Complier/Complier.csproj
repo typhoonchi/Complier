@@ -81,6 +81,7 @@
     <Compile Include="Model\Tokens\OperatorToken.cs" />
     <Compile Include="Model\Tokens\OperatorType.cs" />
     <Compile Include="Model\Tokens\StatementSperatorToken.cs" />
+    <Compile Include="Model\Tokens\UnKnowToken.cs" />
     <Compile Include="Model\Tokens\VariableType.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

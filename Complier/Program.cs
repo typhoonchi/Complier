@@ -8,13 +8,20 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Complier.Model;
+using Complier.Model.Tokens;
 
 namespace Complier
 {
     class Program
     {
+
         static void Main(string[] args)
         {
+            //获取.exe文件所在目录
+            var dir = Path.GetFullPath(".");
+            //args = new []{ dir+"/test.txt" };
+
             string code = string.Empty;
             string defaultCode = string.Empty;
             if (!args.Any())
@@ -81,13 +88,28 @@ int main()
             Console.WriteLine("***********************词法分析************************");
             Console.ResetColor();
             var lexer = new Tokenizer(code);
-            var tokens = lexer.Tokenize();
 
-            foreach (var token in tokens)
+            var tokens = lexer.Tokenize();
+            Console.Write("\t序号\t单词\t类型\t\t\t行号\r\n");
+            for (int i = 0; i < tokens.Length; i++)
             {
-                Console.WriteLine(token);
+                Console.WriteLine($"\t{i+1}\t{tokens[i]}");
+
             }
 
+            var errTokens = tokens.Where(o => o.GetType().Name == "UnKnowToken");
+            var enumerable = errTokens as Token[] ?? errTokens.ToArray();
+            if (enumerable.Any())
+            {
+                Console.WriteLine("\r\n语法分析发现错误;");
+                foreach (var token in enumerable)
+                {
+                    var item = (UnKnowToken) token;
+                    Console.WriteLine($"\r\n\t 第{item.LineNum}行 {item.Content} 出错：{item.ErrText}");
+                }
+
+            }
+            
             //抽象语法树
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("**********************语法分析*************************");

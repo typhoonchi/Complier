@@ -33,8 +33,8 @@ namespace Complier.Model.Tokens
             get { return keywordTypeToVariableType.ContainsKey(KeywordType); }
         }
 
-        public KeywordToken(string content)
-            : base(content)
+        public KeywordToken(string content, int lineNum)
+            : base(content,lineNum)
         {
             if (!validKeywords.ContainsKey(content))
                 throw new ArgumentException("The content is no valid keyword.", "content");

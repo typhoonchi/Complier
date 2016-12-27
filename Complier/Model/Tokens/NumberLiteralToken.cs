@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Complier.Model.Tokens
 {
+    /// <summary>
+    /// 数字token
+    /// </summary>
     class NumberLiteralToken : Token
     {
         private int number;
@@ -15,11 +18,10 @@ namespace Complier.Model.Tokens
         }
 
 
-        public NumberLiteralToken(string content)
-            : base(content)
+        public NumberLiteralToken(string content, int lineNum)
+            : base(content, lineNum)
         {
-            if (!int.TryParse(content, out number))
-                throw new ArgumentException("The content is no valid number.", "content");
+            
         }
     }
 }

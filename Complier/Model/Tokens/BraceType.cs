@@ -8,8 +8,17 @@ namespace Complier.Model.Tokens
 {
     enum BraceType
     {
+        /// <summary>
+        /// ()
+        /// </summary>
         Round,
+        /// <summary>
+        /// []
+        /// </summary>
         Square,
+        /// <summary>
+        /// {}
+        /// </summary>
         Curly
     }
 }

@@ -8,8 +8,12 @@ namespace Complier.Model.Tokens
 {
     class StatementSperatorToken : Token
     {
-        public StatementSperatorToken(string content)
-            : base(content)
+        /// <summary>
+        /// 分号token
+        /// </summary>
+        /// <param name="content"></param>
+        public StatementSperatorToken(string content, int lineNum)
+            : base(content, lineNum)
         {
             if (content != ";")
                 throw new ArgumentException("The content is no statement seperator.", "content");

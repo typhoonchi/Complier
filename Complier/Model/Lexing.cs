@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 namespace Complier.Model
 {
     /// <summary>
-    /// 字符类型
+    /// 字符类型，
     /// </summary>
+    //Flags指示可以将枚举作为位域（即一组标志）处理。
     [Flags]
     enum CharType
     {
@@ -55,14 +56,24 @@ namespace Complier.Model
         /// </summary>
         StatementSeperator = 0x100,
 
+        /// <summary>
+        /// 字母或数字
+        /// </summary>
         AlphaNumeric = Alpha | Numeric,
+        /// <summary>
+        /// 空格，制表符，换行符
+        /// </summary>
         WhiteSpace = LineSpace | NewLine,
+        /// <summary>
+        /// 括号
+        /// </summary>
         Brace = OpenBrace | CloseBrace,
 
         /// <summary>
         /// Chars that "have a special meaning".
         /// </summary>
         MetaChar = Operator | Brace | ArgSeperator | StatementSeperator,
+
         All = AlphaNumeric | WhiteSpace | MetaChar,
     }
 }

@@ -10,8 +10,8 @@ namespace Complier.Model.Tokens
     {
         public BraceType BraceType { get; protected set; }
 
-        public BraceToken(string content)
-            : base(content)
+        public BraceToken(string content,int lineNum)
+            : base(content, lineNum)
         { }
     }
 }

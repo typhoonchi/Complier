@@ -8,8 +8,8 @@ namespace Complier.Model.Tokens
 {
     class IdentifierToken : Token
     {
-        public IdentifierToken(string content)
-            :base(content)
+        public IdentifierToken(string content, int lineNum)
+            :base(content, lineNum)
         { }
     }
 }

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Complier.Model.Tokens
 {
+    /// <summary>
+    /// 变量类型
+    /// </summary>
     public enum VariableType
     {
         Int,

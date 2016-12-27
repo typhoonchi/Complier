@@ -33,14 +33,18 @@ namespace Complier.SyntaxAnalysis
                 scopes.Push(new ProgramNode());
             while (!Eof())
             {
+                //是否为关键字类型"if"、"int"、"return"、"void"、"while"
                 if (Peek() is KeywordToken)
                 {
+                    //取得当前token,指向下一token
                     var keyword = (KeywordToken)Next();
 
                     if (scopes.Count == 1)
                     {
+                        //是否为关键类型“int”，“void”
                         if (keyword.IsTypeKeyword)
                         {
+                            //转换为变量类型
                             var varType = keyword.ToVariableType();
                             
                             var name = ReadToken<IdentifierToken>();
@@ -164,15 +168,15 @@ namespace Complier.SyntaxAnalysis
             return readingPosition >= tokens.Length;
         }
 
-        private IEnumerable<Token> ReadTokenSeqence(params Type[] expectedTypes)
-        {
-            foreach (var t in expectedTypes)
-            {
-                if (!t.IsAssignableFrom(Peek().GetType()))
-                    throw new ParsingException("Unexpected token");
-                yield return Next();
-            }
-        }
+        //private IEnumerable<Token> ReadTokenSeqence(params Type[] expectedTypes)
+        //{
+        //    foreach (var t in expectedTypes)
+        //    {
+        //        if (!t.IsAssignableFrom(Peek().GetType()))
+        //            throw new ParsingException("Unexpected token");
+        //        yield return Next();
+        //    }
+        //}
 
         private IEnumerable<Token> ReadUntilClosingBrace()
         {
@@ -196,7 +200,11 @@ namespace Complier.SyntaxAnalysis
                 yield return Next();
             Next();
         }
-
+        /// <summary>
+        /// 读取当前token,并与预期token进行对比，对比失败抛错
+        /// </summary>
+        /// <typeparam name="TExpected"></typeparam>
+        /// <returns></returns>
         private TExpected ReadToken<TExpected>() where TExpected : Token
         {
             if (Peek() is TExpected)
@@ -204,7 +212,10 @@ namespace Complier.SyntaxAnalysis
             else
                 throw new ParsingException("Unexpected token " + Peek());
         }
-
+        /// <summary>
+        /// 取得当前token
+        /// </summary>
+        /// <returns></returns>
         private Token Peek()
         {
             if (!Eof())
@@ -212,7 +223,10 @@ namespace Complier.SyntaxAnalysis
             else
                 return null;
         }
-
+        /// <summary>
+        /// 获取当前token,并指向下一token
+        /// </summary>
+        /// <returns></returns>
         private Token Next()
         {
             var ret = Peek();

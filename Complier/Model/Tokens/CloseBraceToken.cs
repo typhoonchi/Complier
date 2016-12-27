@@ -8,8 +8,8 @@ namespace Complier.Model.Tokens
 {
     class CloseBraceToken : BraceToken
     {
-        public CloseBraceToken(string content)
-            : base(content)
+        public CloseBraceToken(string content, int lineNum)
+            : base(content, lineNum)
         {
             switch (content)
             {

@@ -1,0 +1,11 @@
+void main()
+{
+	int sum,n,i;
+	i=0;
+	sum=0;
+	n=5;
+	while(i<n){
+		sum=sum+1;
+		i=i+1;
+	}
+} 
