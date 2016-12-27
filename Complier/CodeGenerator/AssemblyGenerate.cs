@@ -85,7 +85,7 @@ namespace Complier.CodeGenerator
             else if (node is VariableReferenceExpressionNode)
                 Visit(node as VariableReferenceExpressionNode);
             else
-                throw new Exception("con't fint correct type.");
+                throw new Exception("can't fint correct type.");
         }
 
         /// <summary>
