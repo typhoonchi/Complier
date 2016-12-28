@@ -109,7 +109,21 @@ int main()
                 }
 
             }
-            
+
+            //Console.WriteLine("**********************符号表*************************");
+            //Console.WriteLine("序号\t变量名\t类型\t\t\t行号");
+            //var iDTokens = tokens.Where(o => o.GetType().Name == "IdentifierToken").ToArray();
+            //for (int i = 0; i < iDTokens.Length; i++)
+            //{
+            //    if (tokens[i].GetType().Name== "KeywordType")
+            //    {
+            //        //i++;
+
+
+            //    }
+            //    Console.WriteLine($"{i + 1}\t{iDTokens[i]}");
+            //}
+
             //抽象语法树
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("**********************语法分析*************************");
@@ -118,6 +132,14 @@ int main()
             //分析之后的语法树
             var ast = parser.ParseToAst();
 
+            Console.WriteLine("**********************符号表*************************");
+            Console.WriteLine("序号\t变量名\t类型\t所在节点");
+
+            for (int i = 0; i < parser.vartable.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}\t{parser.vartable[i].name}\t{parser.vartable[i].type}\t{parser.vartable[i].nodeType.GetType().Name}");
+
+            }
             //四元式表
             QuaternionTypeTable table = new QuaternionTypeTable();
             table.PrintAst(ast);

@@ -15,12 +15,25 @@ namespace Complier.SyntaxAnalysis
         private static int readingPosition;
         private Stack<StatementSequenceNode> scopes;
         private static readonly KeywordType[] typeKeywords = { KeywordType.Int, KeywordType.Void };
+        /// <summary>
+        /// 符号表
+        /// </summary>
+        public struct Vartable
+        {
+
+            public string name; //符号字符串
+            public VariableType type; //变量类型
+            public AstNode nodeType;//所在节点
+        }
+
+        public List<Vartable> vartable;//存储符号
 
         public Parser(Token[] tokens)
         {
             this.tokens = tokens;
             readingPosition = 0;
             scopes = new Stack<StatementSequenceNode>();
+            vartable = new List<Vartable>(); 
         }
 
         /// <summary>
@@ -48,6 +61,16 @@ namespace Complier.SyntaxAnalysis
                             var varType = keyword.ToVariableType();
                             //读取当前token,判断是否为IdentifierToken
                             var name = ReadToken<IdentifierToken>();
+
+                            //将标识符添加到符号表
+                            vartable.Add(new Vartable()
+                            {
+                                name=name.Content,
+                                type = varType,
+                                nodeType = scopes.Peek()
+
+                            });
+
                             //超前搜索
                             Token lookahead = Peek();
 
@@ -80,6 +103,14 @@ namespace Complier.SyntaxAnalysis
                                     if (!argType.IsTypeKeyword)
                                         throw new ParsingException("Expected type keyword!");
                                     var argName = ReadToken<IdentifierToken>();
+                                    //将标识符添加到符号表
+                                    vartable.Add(new Vartable()
+                                    {
+                                        name = argName.Content,
+                                        type = argType.ToVariableType(),
+                                        nodeType = scopes.Peek()
+
+                                    });
                                     //函数节点增加一个参数节点
                                     func.AddParameter(new ParameterDeclarationNode(argType.ToVariableType(), argName.Content));
                                     if (Peek() is ArgSeperatorToken) 
@@ -112,7 +143,14 @@ namespace Complier.SyntaxAnalysis
                             var varType = keyword.ToVariableType();
                             
                             var name = ReadToken<IdentifierToken>();
-                            
+                            //将标识符添加到符号表
+                            vartable.Add(new Vartable()
+                            {
+                                name = name.Content,
+                                type = varType,
+                                nodeType = scopes.Peek()
+
+                            });
                             Token lookahead = Peek();
                             //如果是赋值 = 或者 分号 ;
                             if (lookahead is OperatorToken && (((OperatorToken)lookahead).OperatorType == OperatorType.Assignment) || lookahead is StatementSperatorToken) //变量定义

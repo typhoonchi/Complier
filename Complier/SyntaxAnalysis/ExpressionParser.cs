@@ -125,6 +125,7 @@ namespace Complier.SyntaxAnalysis
                 //变量
                 else if(token is IdentifierToken)
                 {
+                    
                     working.Push(new VariableReferenceExpressionNode(((IdentifierToken)token).Content));
 
                     lastTokenWasOperatorOrLeftBrace = false;
