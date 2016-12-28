@@ -18,9 +18,9 @@ namespace Complier.Model.Ast
         /// <summary>
         /// Creates a new instance of the VariableDeclarationNode class.
         /// </summary>
-        /// <param name="type">The type of the variable.</param>
-        /// <param name="name">The name of the variable.</param>
-        /// <param name="initialValue">A expression used to initialise the variable initially or null to use the default value.</param>
+        /// <param name="type">变量类型</param>
+        /// <param name="name">变量名</param>
+        /// <param name="initialValue">变量初始值，为空的话默认为0</param>
         public VariableDeclarationNode(VariableType type, string name, ExpressionNode initialValue)
         {
             Type = type;
@@ -32,7 +32,7 @@ namespace Complier.Model.Ast
 
         public override void Print()
         {
-            Console.WriteLine("{0}\t,{1}\t\t,{2} ", "VarDeclar", this.Type, this.Name);
+            Console.WriteLine("{0}\t{1}\t{2} ", "变量", this.Type, this.Name);
             InitialValueExpression.Print();
         }
     }

@@ -52,7 +52,7 @@ namespace Complier.Model.Ast
         
         public override void Print()
         {
-            Console.WriteLine("{0}\t\t,{1}\t ", "FunCall", this.FunctionName);
+            Console.WriteLine("{0}\t\t,{1}\t ", "函数调用", this.FunctionName);
             arguments.ForEach(p=>p.Print());
         }
     }

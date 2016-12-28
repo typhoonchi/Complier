@@ -96,7 +96,7 @@ namespace Complier.CodeGenerator
         {
             var builder = new StringBuilder();
             builder.Append("变量定义：");
-            builder.AppendFormat("{0} {1} ", node.Type, node.Name);
+            builder.AppendFormat("{0}\t{1} ", node.Type, node.Name);
             Console.Write(builder.ToString());
             Visit((Object)node.InitialValueExpression);
         }
@@ -169,17 +169,18 @@ namespace Complier.CodeGenerator
         public void Visit(FunctionDeclarationNode node)
         {
             var builder = new StringBuilder();
-            builder.Append("函数定义:");
-            builder.AppendFormat("    函数名称:{0}\n", node.FunctionName);
-            builder.Append("    函数参数:");
+            builder.Append("\n函数定义:\n");
+            builder.AppendFormat("\t函数名称:{0}\n", node.FunctionName);
+            builder.Append("\t函数参数:");
             foreach(var item in node.Parameters)
             {
                 builder.Append(item);
             }
-            builder.AppendLine("    函数体：");
+            builder.AppendLine("\r\n\t函数体：");
             Console.WriteLine(builder.ToString());
             foreach(var item in node.SubNodes)
             {
+                Console.Write("\t\t");
                 Visit((Object)item);
             }
         }
@@ -206,7 +207,7 @@ namespace Complier.CodeGenerator
             builder.Append("二元操作符:");
             Console.WriteLine(builder.ToString());
             Visit((Object)node.OperandA);
-            Console.Write(node.OperationType);
+            Console.WriteLine(node.OperationType);
             Visit((Object)node.OperandB);
         }
 
@@ -217,7 +218,7 @@ namespace Complier.CodeGenerator
         public void Visit(FunctionCallExpressionNode node)
         {
             var builder = new StringBuilder();
-            builder.Append("函数调用：");
+            builder.Append("  函数调用：");
             builder.AppendFormat("{0}(", node.FunctionName);
             foreach(var item in node.Arguments)
             {
@@ -251,7 +252,7 @@ namespace Complier.CodeGenerator
         /// <param name="node"></param>
         public void Visit(VariableReferenceExpressionNode node)
         {
-            Console.Write("变量调用:");
+            Console.Write("\n变量调用:\t");
             Console.Write(node.VariableName);
         }
     }

@@ -28,7 +28,7 @@ namespace Complier
             {
                 #region 源程序
                 defaultCode = @"
-int a = 5;
+int a = 16;
 
 int func(int b)
 {
@@ -38,8 +38,8 @@ int func(int b)
 
 int main()
 {
-    a = 6;
-    func(4);
+    a = 16;
+    a=func(4);
     return a*2;
 }";
                 code = defaultCode;
@@ -88,7 +88,7 @@ int main()
             Console.WriteLine("***********************词法分析************************");
             Console.ResetColor();
             var lexer = new Tokenizer(code);
-
+            //词法分析结果
             var tokens = lexer.Tokenize();
             Console.Write("\t序号\t单词\t类型\t\t\t行号\r\n");
             for (int i = 0; i < tokens.Length; i++)
@@ -115,6 +115,7 @@ int main()
             Console.WriteLine("**********************语法分析*************************");
             Console.ResetColor();
             var parser = new Parser(tokens);
+            //分析之后的语法树
             var ast = parser.ParseToAst();
 
             //四元式表

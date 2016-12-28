@@ -47,7 +47,7 @@ namespace Complier.Model.Ast
 
         public override void Print()
         {
-            Console.WriteLine("{0}\t,{1}\t\t,{2}\t ", "FunDeclar", ParameterToString(), this.FunctionName);
+            Console.WriteLine("{0}\t{1}\t\t{2}\t ", "函数", ParameterToString(), this.FunctionName);
             foreach(var item in SubNodes)
             {
                 item.Print();

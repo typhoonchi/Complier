@@ -46,28 +46,41 @@ namespace Complier.SyntaxAnalysis
                         {
                             //转换为变量类型
                             var varType = keyword.ToVariableType();
-                            
+                            //读取当前token,判断是否为IdentifierToken
                             var name = ReadToken<IdentifierToken>();
                             //超前搜索
                             Token lookahead = Peek();
+
+                            //如果是等号=或者分号;则为变量定义表达式
                             if (lookahead is OperatorToken && (((OperatorToken)lookahead).OperatorType == OperatorType.Assignment) || lookahead is StatementSperatorToken) 
                             {
+                                //如果是=号，设置下一token,将识别出  int x=0;
+                                //如果是;号，将变量默认值设置为0，识别出 int x;
+
                                 if (lookahead is OperatorToken)
-                                    Next(); 
+                                    Next();
+                                //给当前栈的节点添加一个变量定义节点VariableDeclarationNode
                                 scopes.Peek().AddStatement(new VariableDeclarationNode(varType, name.Content, ExpressionNode.CreateFromTokens(ReadUntilStatementSeperator())));
+
+                                /*--------到这里识别出一个定义变量的表达式------*/
                             }
+                            //如果是左括号(  ，则为方法
                             else if (lookahead is OpenBraceToken && (((OpenBraceToken)lookahead).BraceType == BraceType.Round)) 
                             {
                                 var func = new FunctionDeclarationNode(name.Content);
                                 scopes.Peek().AddStatement(func); 
                                 scopes.Push(func); 
                                 Next(); 
+                                //右括号之前的所有内容，识别为参数定义
+                                //TODO 增加无参数函数识别在这里
                                 while (!(Peek() is CloseBraceToken && ((CloseBraceToken)Peek()).BraceType == BraceType.Round)) 
                                 {
+                                    //变量类型
                                     var argType = ReadToken<KeywordToken>();
                                     if (!argType.IsTypeKeyword)
                                         throw new ParsingException("Expected type keyword!");
                                     var argName = ReadToken<IdentifierToken>();
+                                    //函数节点增加一个参数节点
                                     func.AddParameter(new ParameterDeclarationNode(argType.ToVariableType(), argName.Content));
                                     if (Peek() is ArgSeperatorToken) 
                                         Next();
@@ -75,15 +88,23 @@ namespace Complier.SyntaxAnalysis
 
                                 Next();
                                 var curlyBrace = ReadToken<OpenBraceToken>();
+                                //如果不是{}，出错
                                 if (curlyBrace.BraceType != BraceType.Curly)
+                                    //
                                     throw new ParsingException("Wrong brace type found!");
+
+                                /*---------到这里为止，识别出的是函数名，参数，半个大括号{  ------------*/
                             }
                             else
+                                //TODO 类型+变量之后，如果不是= ; ( 这三种，则出错
                                 throw new Exception("The parser encountered an unexpected token.");
                         }
                         else
+                            //程序的开始不是int或者void，发生语法错误
+                            //TODO 记录语法错误 或者新增变量识别，如char
                             throw new ParsingException("Found non-type keyword on top level.");
                     }
+                    //栈的元素多于1
                     else
                     {
                         if (keyword.IsTypeKeyword)
@@ -93,15 +114,19 @@ namespace Complier.SyntaxAnalysis
                             var name = ReadToken<IdentifierToken>();
                             
                             Token lookahead = Peek();
-                            if (lookahead is OperatorToken && (((OperatorToken)lookahead).OperatorType == OperatorType.Assignment) || lookahead is StatementSperatorToken) //variable declaration
+                            //如果是赋值 = 或者 分号 ;
+                            if (lookahead is OperatorToken && (((OperatorToken)lookahead).OperatorType == OperatorType.Assignment) || lookahead is StatementSperatorToken) //变量定义
                             {
                                 if (lookahead is OperatorToken)
                                     Next();
+                                //添加定义变量节点
                                 scopes.Peek().AddStatement(new VariableDeclarationNode(varType, name.Content, ExpressionNode.CreateFromTokens(ReadUntilStatementSeperator())));
                             }
+                            //else 这里可以添加运算符类型
                         }
                         else
                         {
+                            //TODO 在这里添加方法里面的其他内容，比如for foreach switch
                             switch (keyword.KeywordType)
                             {
                                 case KeywordType.Return:
@@ -131,17 +156,22 @@ namespace Complier.SyntaxAnalysis
                         }
                     }
                 }
+                //自定义变量
                 else if (Peek() is IdentifierToken && scopes.Count > 1)
                 {
                     var name = ReadToken<IdentifierToken>();
+
+                    //=号，赋值语句
                     if (Peek() is OperatorToken && ((OperatorToken)Peek()).OperatorType == OperatorType.Assignment)
                     {
                         Next(); 
                         scopes.Peek().AddStatement(new VariableAssingmentNode(name.Content, ExpressionNode.CreateFromTokens(ReadUntilStatementSeperator())));
                     }
+                    //变量后面是 ( 号,函数调用
                     else
                         scopes.Peek().AddStatement(ExpressionNode.CreateFromTokens(new[] { name }.Concat(ReadUntilStatementSeperator())));
                 }
+                //  }
                 else if (Peek() is CloseBraceToken)
                 {
                     var brace = ReadToken<CloseBraceToken>();
@@ -177,7 +207,10 @@ namespace Complier.SyntaxAnalysis
         //        yield return Next();
         //    }
         //}
-
+        /// <summary>
+        /// 从当前token开始读取右括号之前的所有token,
+        /// </summary>
+        /// <returns></returns>
         private IEnumerable<Token> ReadUntilClosingBrace()
         {
             //while (!Eof() && !(Peek() is CloseBraceToken))
@@ -193,15 +226,20 @@ namespace Complier.SyntaxAnalysis
             }
             Next();
         }
-
+        /// <summary>
+        /// 从当前token开始读取分号之前的所有token,
+        /// </summary>
+        /// <returns></returns>
         private IEnumerable<Token> ReadUntilStatementSeperator()
         {
+            //循环条件：没到tokens末尾和不是分号
             while (!Eof() && !(Peek() is StatementSperatorToken))
+                //将符合条件的token添加到IEnumerable<Token>，运行到方法尾的时候，返回IEnumerable<Token>
                 yield return Next();
             Next();
         }
         /// <summary>
-        /// 读取当前token,并与预期token进行对比，对比失败抛错
+        /// 读取当前token,并与预期token进行对比，对比失败抛错,对比成功设置下一token
         /// </summary>
         /// <typeparam name="TExpected"></typeparam>
         /// <returns></returns>

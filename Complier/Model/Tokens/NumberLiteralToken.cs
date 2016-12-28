@@ -12,16 +12,13 @@ namespace Complier.Model.Tokens
     class NumberLiteralToken : Token
     {
         private int number;
-        public int Number
-        {
-            get { return number; }
-        }
+        public int Number => number;
 
 
         public NumberLiteralToken(string content, int lineNum)
             : base(content, lineNum)
         {
-            
+            number = int.Parse(content);
         }
     }
 }

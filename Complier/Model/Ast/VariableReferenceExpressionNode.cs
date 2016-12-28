@@ -16,7 +16,7 @@ namespace Complier.Model.Ast
 
         public override void Print()
         {
-            Console.WriteLine("{0}\t\t,{1}", "VarRef", this.VariableName);
+            Console.WriteLine("{0}\t\t{1}", "变量引用", this.VariableName);
         }
     }
 }

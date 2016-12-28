@@ -18,8 +18,8 @@ namespace Complier.SyntaxAnalysis
         /// <param name="ast"></param>
         public void PrintAst(ProgramNode ast)
         {
-            Console.WriteLine("--------------------------------------------------------");
-            Console.WriteLine("Operator    | \targ1\t | \targ2\t | \tresult\t");
+            Console.WriteLine("---------------------语法树---------------------------");
+            Console.WriteLine("类型\targ1\t\targ2\t\t结果\t");
             foreach(var item in ast.SubNodes)
             {
                 item.Print();

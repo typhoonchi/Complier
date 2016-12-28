@@ -16,7 +16,7 @@ namespace Complier.Model.Ast
 
         public override void Print()
         {
-            Console.WriteLine("{0}\t\t,{1}","Number", Value);
+            Console.WriteLine("{0}\t{1}","数字", Value);
         }
     }
 }

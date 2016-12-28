@@ -22,7 +22,7 @@ namespace Complier.Model.Ast
 
         public override void Print()
         {
-            Console.Write("{0}\t,{1}\t\t ", "VarAssing", this.VariableName);
+            Console.Write("{0}\t{1}\t\t ", "变量赋值", this.VariableName);
             ValueExpression.Print();
         }
     }
