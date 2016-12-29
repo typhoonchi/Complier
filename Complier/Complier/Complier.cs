@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.CSharp;
 
 namespace Complier.Complier
 {
@@ -11,7 +12,7 @@ namespace Complier.Complier
     {
         public CompilerResults Compile(string codes)
         {
-            CodeDomProvider compiler = new Microsoft.CSharp.CSharpCodeProvider();
+            CodeDomProvider compiler = new CSharpCodeProvider();
             CompilerParameters parameters = new CompilerParameters();
             parameters.ReferencedAssemblies.Add("System.dll");
 
@@ -63,6 +64,7 @@ sealed class Program
                     Console.WriteLine("Line:{0}\tError:{1}", item.Line, item.ErrorText);
                 }
                 Console.ResetColor();
+                return;
             }
             Console.WriteLine("Build Success!");
             try

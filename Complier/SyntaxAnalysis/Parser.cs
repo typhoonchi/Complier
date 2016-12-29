@@ -24,6 +24,10 @@ namespace Complier.SyntaxAnalysis
             public string name; //符号字符串
             public VariableType type; //变量类型
             public AstNode nodeType;//所在节点
+            /// <summary>
+            /// 所在行数
+            /// </summary>
+            public int LineNum;
         }
 
         public List<Vartable> vartable;//存储符号
@@ -67,8 +71,8 @@ namespace Complier.SyntaxAnalysis
                             {
                                 name=name.Content,
                                 type = varType,
-                                nodeType = scopes.Peek()
-
+                                nodeType = scopes.Peek(),
+                                LineNum = name.LineNum
                             });
 
                             //超前搜索
@@ -108,8 +112,8 @@ namespace Complier.SyntaxAnalysis
                                     {
                                         name = argName.Content,
                                         type = argType.ToVariableType(),
-                                        nodeType = scopes.Peek()
-
+                                        nodeType = scopes.Peek(),
+                                        LineNum=name.LineNum
                                     });
                                     //函数节点增加一个参数节点
                                     func.AddParameter(new ParameterDeclarationNode(argType.ToVariableType(), argName.Content));
@@ -148,8 +152,8 @@ namespace Complier.SyntaxAnalysis
                             {
                                 name = name.Content,
                                 type = varType,
-                                nodeType = scopes.Peek()
-
+                                nodeType = scopes.Peek(),
+                                LineNum = name.LineNum
                             });
                             Token lookahead = Peek();
                             //如果是赋值 = 或者 分号 ;

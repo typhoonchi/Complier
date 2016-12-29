@@ -30,17 +30,17 @@ namespace Complier
                 defaultCode = @"
 int a = 16;
 
-int func(int b)
+int func(int b,int bb)
 {
-    int c = (5*b)+7;
+    int c = (5*b)+7*bb;
     return c;
 }
 
 int main()
 {
     a = 16;
-    a=func(4);
-    return a*2;
+    a=func(4,8);
+    return a;
 }";
                 code = defaultCode;
 
@@ -67,10 +67,11 @@ int main()
                     try
                     {
                         code = File.ReadAllText(args[0]);
-                    }catch(FileLoadException ex)
+                    }
+                    catch (FileLoadException ex)
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("打开文件失败:"+ex.Message);
+                        Console.WriteLine("打开文件失败:" + ex.Message);
                         code = defaultCode;
                     }
                 }
@@ -93,7 +94,7 @@ int main()
             Console.Write("\t序号\t单词\t类型\t\t\t行号\r\n");
             for (int i = 0; i < tokens.Length; i++)
             {
-                Console.WriteLine($"\t{i+1}\t{tokens[i]}");
+                Console.WriteLine($"\t{i + 1}\t{tokens[i]}");
 
             }
 
@@ -104,25 +105,11 @@ int main()
                 Console.WriteLine("\r\n语法分析发现错误;");
                 foreach (var token in enumerable)
                 {
-                    var item = (UnKnowToken) token;
+                    var item = (UnKnowToken)token;
                     Console.WriteLine($"\r\n\t 第{item.LineNum}行 {item.Content} 出错：{item.ErrText}");
                 }
 
             }
-
-            //Console.WriteLine("**********************符号表*************************");
-            //Console.WriteLine("序号\t变量名\t类型\t\t\t行号");
-            //var iDTokens = tokens.Where(o => o.GetType().Name == "IdentifierToken").ToArray();
-            //for (int i = 0; i < iDTokens.Length; i++)
-            //{
-            //    if (tokens[i].GetType().Name== "KeywordType")
-            //    {
-            //        //i++;
-
-
-            //    }
-            //    Console.WriteLine($"{i + 1}\t{iDTokens[i]}");
-            //}
 
             //抽象语法树
             Console.ForegroundColor = ConsoleColor.Green;
@@ -140,16 +127,41 @@ int main()
                 Console.WriteLine($"{i + 1}\t{parser.vartable[i].name}\t{parser.vartable[i].type}\t{parser.vartable[i].nodeType.GetType().Name}");
 
             }
+
+            Console.WriteLine("**********************四元式*************************");
+
+            //Console.WriteLine("序号\t类型\t操作数一\t操作数二\t结果\t");
+
             //四元式表
-            QuaternionTypeTable table = new QuaternionTypeTable();
+            var siyuanshi = new List<QuaternionTypeTable._Siyuanshi>();
+            QuaternionTypeTable table = new QuaternionTypeTable(ast, parser.vartable, ref siyuanshi);
+            //调用转换方法
             table.PrintAst(ast);
+            //输出结果
+            for (int i = 0; i < siyuanshi.Count; i++)
+            {
+                var item = siyuanshi[i];
+                Console.WriteLine($"{i + 1}\t( {item.op} , {item.oper1} , {item.oper2} , {item.result} )");
+            }
+            if (table.Errors.HasErros)
+            {
+                Console.WriteLine("\r\n错误：");
+                for (int i = 0; i < table.Errors.ErrorTexts.Count; i++)
+                {
+                    Console.WriteLine($"\t{table.Errors.ErrorTexts[i]}");
+
+                }
+            }
 
 
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("**********************代码生成*************************");
+            Console.WriteLine("**********************中间代码生成和汇编代码生成*************************");
             Console.ResetColor();
             var codeGenerate = new AssemblyGenerate();
-            codeGenerate.Generate(ast);
+            var AssemblyCode = codeGenerate.Code(siyuanshi);
+            Console.WriteLine(AssemblyCode);
+
+
 
             //编译
             Console.ForegroundColor = ConsoleColor.Green;
